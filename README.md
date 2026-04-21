@@ -17,7 +17,7 @@ REDIS_URL=redis://localhost:6379/0
 EMAIL_BACKEND=sgbackend.SendGridBackend
 SENDGRID_API_KEY=SG.xxxxxx
 
----
+```
 
 ## Directory Structure
 ```
@@ -47,3 +47,4 @@ visitor_backend/
 ├── conftest.py
 └── manage.py
 ```
+
