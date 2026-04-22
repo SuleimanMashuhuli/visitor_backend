@@ -36,7 +36,7 @@ class Visit(models.Model):
 
     def check_in(self):
         if self.status == 'approved' and not self.approved_at:
-            self.check_in_at = timezone,now()
+            self.check_in_at = timezone.now()
         self.save()
 
     def check_out(self):
