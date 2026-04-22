@@ -1,50 +1,46 @@
+# Visitor Management Backend
 
-# Visitor Backend Architecture
+Django REST API backend for managing visitor check-ins, host approvals, and visit tracking.
 
-Django Backend for a visitor management system with tokenized email links, scheduled tasks and async email processing.
+## Features
 
-## Configuration
+- Visitor registration and check-in/check-out tracking
+- Host approval workflow with tokenized email links
+- Blacklist management for banned visitors
+- Audit logging for compliance
+- Scheduled visit expiration
 
-### Environment Variables
-```bash
-# Database
-DATABASE_URL=postgres://user:pass@localhost:5432/visitors
 
-# Redis
-REDIS_URL=redis://localhost:6379/0
+## Project Structure
 
-# Email
-EMAIL_BACKEND=sgbackend.SendGridBackend
-SENDGRID_API_KEY=SG.xxxxxx
-
-```
-
-## Directory Structure
 ```
 visitor_backend/
-├── config/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── celery.py
-├── apps/
-│   ├── users/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
-│   │   └── permissions.py
-│   ├── visit/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
-│   │   ├── tasks.py
-│   │   └── signals.py
-│   ├── blacklist/
-│   └── auditlog/
-├── templates/
-│   └── email/
-│       └── visit_request.html
-├── conftest.py
-└── manage.py
+├── visitor/
+│   ├── models/
+│   │   ├── visit.py        # Visit model
+│   │   ├── host.py         # Host model
+│   │   ├── profiles.py     # Visitor profiles
+│   │   ├── blacklist.py    # Blacklist model
+│   │   ├── auditlog.py     # Audit logging
+│   │   └── approval.py    # Approval workflow
+│   ├── serializers/       # DRF serializers
+│   ├── views/             # API views
+│   ├── services/          # Business logic
+│   ├── enums/             # Constants
+│   └── urls.py            # URL routing
+├── visitor_backend/
+│   ├── settings.py        # Django settings
+│   ├── urls.py            # Root URLs
+│   └── wsgi.py            # WSGI config
+├── manage.py
+└── requirements.txt
 ```
 
+## Models
+
+- **Visit**: Tracks visitor check-in/check-out, status, and duration
+- **Host**: Employee who receives visitors
+- **Profiles**: Visitor information and history
+- **Blacklist**: Banned visitors
+- **AuditLog**: Compliance audit trail
+- **Approval**: Visit approval workflow
