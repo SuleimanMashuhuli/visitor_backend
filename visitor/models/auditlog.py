@@ -1,6 +1,7 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
 from django.db import models
+from .models.visits import (Visit)
 from .enums.id_types import (STATUS_CHOICES)
 
 class AuditLog(models.Model):

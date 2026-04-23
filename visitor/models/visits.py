@@ -3,6 +3,7 @@ __author__ = 'Suleiman Ali Mashuhuli'
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+from .models.host import (Host)
 from .enums.id_types import (ID_TYPES, STATUS_CHOICES, TYPE_VISIT)
 
 
@@ -17,7 +18,7 @@ class Visit(models.Model):
     visitor_email = models.EmailField(max_length=15, default='')
     phoneNumber = models.CharField(max_length=10, default='')
     id_type = models.CharField(max_length=20, choices=ID_TYPES, default='national_id')
-    id_number = models.CharField(max_length=10, unique=True, default='')
+    id_number = models.CharField(max_length=20, unique=True, default='')
     visit_type = models.CharField(max_length=25, choices=TYPE_VISIT, default='external_walkin')
     organization = models.CharField(max_length=100, default='')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending') 

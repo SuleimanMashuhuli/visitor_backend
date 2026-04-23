@@ -6,7 +6,7 @@ from datetime import timedelta
 
 @shared_task
 def send_host_approval_email(self, id):
-    visit = Visit.objects.select_related.('host').get(id=id)
+    visit = Visit.objects.select_related('host').get(id=id)
     approve_url = f"https://yourapp.com/api/action/{visit.approval_token}?decision=approve"
     reject_url = f"https://yourapp.com/api/action/{visit.approval_token}?decision=reject"
 
@@ -25,10 +25,10 @@ def expire_pending_visits():
 @shared_task
 def auto_checkout_overdue():
     now = timezone.now()
-    overdue = Visit.objects.filter(status='checked_in', checked_out_at__isnull=True)
+    overdue = Visit.objects.filter(status='checked_in', check_out_at__isnull=True)
     for v in overdue:
         deadline = v.checked_in_at + timedelta(minutes=v.expected_duration_mins + 30)
         if now > deadline:
-            v.status = 'checked_out'
-            v.checked_out_at = now
-            v.save(update_fields=['status', 'checked_out_at'])
+            v.status = 'check_out'
+            v.check_out_at = now
+            v.save(update_fields=['status', 'check_out_at'])

@@ -42,11 +42,11 @@ def summary(request):
         'approved': summary_report.filter(status='approved').count(),
         'rejected': summary_report.filter(status='rejected').count(),
         'checked_in': summary_report.filter(checked_in_at__isnull=False,
-                                checked_out_at__isnull=True).count(),
-        'checked_out': summary_report.filter(status='checked_out').count(),
+                                check_out_at__isnull=True).count(),
+        'check_out': summary_report.filter(status='check_out').count(),
         'still_inside': summary_report.filter(status='approved',
                                   checked_in_at__isnull=False,
-                                  checked_out_at__isnull=True).count(),
+                                  check_out_at__isnull=True).count(),
     }
     return Response(data)
 
@@ -78,7 +78,7 @@ def daily(request):
             'status': s,
             'count': daily_report.filter(status=s).count(),
         }
-        for s in ['pending', 'approved', 'rejected', 'checked_out']
+        for s in ['pending', 'approved', 'rejected', 'check_out']
     ]
 
     return Response({
@@ -110,7 +110,7 @@ def export_csv(request):
           .order_by('-created_at'))
 
     header = [
-        'Code', 'Visitor', 'Type', 'ID Number', 'Contact',
+        'Visitor', 'Type', 'ID Number', 'Contact',
         'Organization', 'Host', 'Status',
         'Booked At', 'Approved At', 'Checked In', 'Checked Out',
     ]
@@ -126,12 +126,12 @@ def export_csv(request):
                 csvR.id_number,
                 csvR.contact,
                 csvR.organization or '',
-                getattr(getattr(csvR.host, 'user', None), 'full_name', '') if csvR.host else '',
+                getattr(getattr(csvR.host, 'user', None), 'visitor_name', '') if csvR.host else '',
                 csvR.status,
                 csvR.created_at.isoformat() if csvR.created_at else '',
                 csvR.approved_at.isoformat() if csvR.approved_at else '',
                 csvR.checked_in_at.isoformat() if csvR.checked_in_at else '',
-                csvR.checked_out_at.isoformat() if csvR.checked_out_at else '',
+                csvR.check_out_at.isoformat() if csvR.check_out_at else '',
             ])
 
     response = StreamingHttpResponse(row_iter(), content_type='text/csv')

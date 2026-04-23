@@ -20,7 +20,6 @@ visitor_backend/
 │   │   ├── visit.py        # Visit model
 │   │   ├── host.py         # Host model
 │   │   ├── profiles.py     # Visitor profiles
-│   │   ├── blacklist.py    # Blacklist model
 │   │   ├── auditlog.py     # Audit logging
 │   │   └── approval.py    # Approval workflow
 │   ├── serializers/       # DRF serializers

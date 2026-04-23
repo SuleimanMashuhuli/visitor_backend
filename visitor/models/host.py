@@ -9,7 +9,7 @@ class Host(models.Model):
 
     host_name = models.CharField(max_length=100, default='')
     host_email = models.EmailField(max_length=15, default='')
-    department = models.CharField(max_length=10, default='')
+    department = models.CharField(max_length=50, default='')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

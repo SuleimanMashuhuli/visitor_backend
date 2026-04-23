@@ -3,6 +3,7 @@ __author__ = 'Suleiman Ali Mashuhuli'
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+from .models.visits import (Visit)
 
 class Approval(models.Model):
     """
