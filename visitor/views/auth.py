@@ -10,3 +10,4 @@ __author__ = 'Suleiman Ali Mashuhuli'
     POST password_reset	/api/auth/password/reset/	Request reset email
     POST password_reset_confirm	/api/auth/password/reset/confirm/	Apply new password
 """
+

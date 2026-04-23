@@ -1,7 +1,7 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
 from rest_framework import serializers
-from .models import (Visit)
+from .models.visits import (Visit)
 
 class VisitSerializer(serializers.ModelSerializer):
     class Meta:

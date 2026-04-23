@@ -1,7 +1,7 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
 from rest_framework import serializers
-from .models import (Approval)
+from .models.approval import (Approval)
 
 class ApprovalSerializer(serializers.ModelSerializer):
     class Meta:

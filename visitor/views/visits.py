@@ -1,16 +1,12 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
-from django.shortcuts import render
 from django.utils import timezone
-from datetime import timedelta, datetime, date
-from rest_framework import viewsets
-from rest_framework import action
-from rest_framework import status
+from datetime import (timedelta, datetime, date)
+from rest_framework import (viewsets, status)
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import (Visit)
-from .serializers import (VisitSerializer)
-from django.http import (JsonResponse, HttpResponse)
-
+from .models.visits import (Visit)
+from .serializers.visits import (VisitSerializer)
 
 class VisitViewSet(viewsets.ModelViewSet):
     queryset = Visit.objects.all()
@@ -37,5 +33,5 @@ class VisitViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def resend_email(self, request, pk):
         visit = self.get_object()
-        send_email_notification.delay(visit.id)
+        send_host_approval_email.delay(visit.id)
         return Response({'message': "Email sent"})

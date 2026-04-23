@@ -1,6 +1,8 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
+import os
 from pathlib import Path
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vq8p@l0#qu=s1@r5@q0%av%8^5qqep17p5r#m%$8v3m7x=%_4!'
@@ -82,3 +84,29 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'  # or 'amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+    'expire-pending': {
+        'task': 'visits.tasks.expire_pending_visits',
+        'schedule': crontab(minute='*/15'),
+    },
+    'auto-checkout': {
+        'task': 'visits.tasks.auto_checkout_overdue',
+        'schedule': crontab(minute='*/30'),
+    },
+    'daily-report': {
+        'task': 'visits.tasks.send_daily_admin_report',
+        'schedule': crontab(hour=8, minute=0),
+    },
+    'purge-audit': {
+        'task': 'visits.tasks.purge_old_audit_logs',
+        'schedule': crontab(hour=2, minute=0, day_of_week=0),
+    },
+}
