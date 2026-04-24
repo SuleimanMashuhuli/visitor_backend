@@ -59,9 +59,9 @@ WSGI_APPLICATION = 'visitor_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('POSTGRES_USER', "visitor"),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', "root"),
+        'NAME': os.environ.get('DB_NAME', 'visitor_db'),
+        'USER': os.environ.get('POSTGRES_USER', 'visitor'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'root'),
         'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': 5432
     }
