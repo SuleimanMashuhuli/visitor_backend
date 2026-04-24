@@ -4,12 +4,14 @@ import csv
 from io import BytesIO
 from django.shortcuts import render
 from django.utils import timezone
-from datetime import (timedelta, date, datetime)
+from datetime import timedelta, datetime
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models.visits import (Visit)
+from ..models.visits import Visit
 from rest_framework.response import Response
-from django.http import (HttpResponse, JsonResponse)
+from django.http import StreamingHttpResponse
+from ..serializers.visits import VisitSerializer
+from django.db.models import Avg, F
 
 def _parse_date(value):
     """Parse YYYY-MM-DD or return today."""
@@ -138,3 +140,59 @@ def export_csv(request):
     filename = f'visitors_{date_from}_{date_to}.csv'
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     return response
+
+
+class _Echo:
+    def write(self, x):
+        return x
+
+
+@api_view(['GET'])
+def dashboard(request):
+    today = timezone.localdate()
+    today_start = timezone.make_aware(datetime.combine(today, datetime.min.time()))
+    today_end = timezone.make_aware(datetime.combine(today, datetime.max.time()))
+    now = timezone.now()
+
+    pending_count = Visit.objects.filter(status='pending').count()
+
+    approved_today = Visit.objects.filter(
+        status='approved',
+        approved_at__gte=today_start,
+        approved_at__lte=today_end
+    ).count()
+
+    approved_last_30_days = Visit.objects.filter(
+        status='approved',
+        approved_at__isnull=False,
+        approved_at__gte=now - timedelta(days=30)
+    )
+    if approved_last_30_days.exists():
+        avg_secs = approved_last_30_days.annotate(
+            approval_duration=F('approved_at') - F('created_at')
+        ).aggregate(avg=Avg('approval_duration'))['avg']
+        avg_approval_time = int(avg_secs.total_seconds()) if avg_secs else 0
+    else:
+        avg_approval_time = 0
+
+    inside_count = Visit.objects.filter(
+        status='approved',
+        checked_in_at__isnull=False,
+        check_out_at__isnull=True
+    ).count()
+
+    outside_count = Visit.objects.filter(
+        check_out_at__isnull=False
+    ).count()
+
+    recent_visits = Visit.objects.select_related('host').order_by('-created_at')[:6]
+    recent_visits_data = VisitSerializer(recent_visits, many=True).data
+
+    return Response({
+        'pending_count': pending_count,
+        'approved_today': approved_today,
+        'avg_approval_time': avg_approval_time,
+        'inside_count': inside_count,
+        'outside_count': outside_count,
+        'recent_visits': recent_visits_data,
+    })

@@ -1,7 +1,7 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
 from rest_framework import serializers
-from .models.auditlog import (AuditLog)
+from ..models.auditlog import AuditLog
 
 class AuditLogSerializer(serializers.ModelSerializer):
     class Meat:

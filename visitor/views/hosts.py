@@ -1,24 +1,18 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
-from rest_framework import (viewsets, status)
-from rest_framework.decorators import action 
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models.host import (Host)
-from .serializers.host import (HostSerializer)
-from django.permissions import (IsAuthenticated, IsAdminUser)
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from ..models.host import Host
+from ..serializers.host import HostSerializer
 
-class HostSerializer(viewsets.ModelViewSet):
-    """
-        GET	/api/action/{token}/	One-click approve/reject from email
-        list	GET /api/hosts/	Dropdown source for booking form
-        destroy	GET /api/hosts/{id}/	
-        create / update / destroy	Standard	Admin only
-        @action available	GET /api/hosts/available/	Filter is_available=True
-    """
+
+class HostViewSet(viewsets.ModelViewSet):
     queryset = Host.objects.all()
     serializer_class = HostSerializer
 
-   def get_permissions(self):
+    def get_permissions(self):
         if self.action in ('list', 'retrieve', 'available'):
             return [IsAuthenticated()]
         return [IsAdminUser()]
@@ -30,3 +24,7 @@ class HostSerializer(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+def available(request):
+    hosts = Host.objects.filter(is_available=True)
+    serializer = HostSerializer(hosts, many=True)
+    return Response(serializer.data)

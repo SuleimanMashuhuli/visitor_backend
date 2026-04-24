@@ -5,8 +5,8 @@ from datetime import (timedelta, datetime, date)
 from rest_framework import (viewsets, status)
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models.visits import (Visit)
-from .serializers.visits import (VisitSerializer)
+from ..models.visits import Visit
+from ..serializers.visits import VisitSerializer
 
 class VisitViewSet(viewsets.ModelViewSet):
     queryset = Visit.objects.all()
@@ -33,5 +33,40 @@ class VisitViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def resend_email(self, request, pk):
         visit = self.get_object()
+        from visitor.tasks.tasks import send_host_approval_email
         send_host_approval_email.delay(visit.id)
         return Response({'message': "Email sent"})
+
+
+def check_in(request, id):
+    from rest_framework.response import Response
+    from rest_framework import status
+    try:
+        visit = Visit.objects.get(id=id)
+        visit.check_in()
+        return Response(VisitSerializer(visit).data, status=status.HTTP_200_OK)
+    except Visit.DoesNotExist:
+        return Response({'detail': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+def check_out(request, id):
+    from rest_framework.response import Response
+    from rest_framework import status
+    try:
+        visit = Visit.objects.get(id=id)
+        visit.check_out()
+        return Response(VisitSerializer(visit).data, status=status.HTTP_200_OK)
+    except Visit.DoesNotExist:
+        return Response({'detail': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+def resend_email(request, id):
+    from rest_framework.response import Response
+    from rest_framework import status
+    from visitor.tasks.tasks import send_host_approval_email
+    try:
+        visit = Visit.objects.get(id=id)
+        send_host_approval_email.delay(visit.id)
+        return Response({'message': "Email sent"}, status=status.HTTP_200_OK)
+    except Visit.DoesNotExist:
+        return Response({'detail': 'Not found'}, status=status.HTTP_404_NOT_FOUND)

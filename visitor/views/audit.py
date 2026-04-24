@@ -5,9 +5,9 @@ from django.utils import timezone
 from datetime import (timedelta, date, datetime)
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.status import status
-from .serializers.auditlog import (AuditLogSerializer)
-from .models.auditlog import (AuditLog)
+from rest_framework import status
+from ..serializers.auditlog import AuditLogSerializer
+from ..models.auditlog import AuditLog
 
 
 @api_view(['GET'])

@@ -3,8 +3,8 @@ __author__ = 'Suleiman Ali Mashuhuli'
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-from .models.host import (Host)
-from .enums.id_types import (ID_TYPES, STATUS_CHOICES, TYPE_VISIT)
+from .host import Host
+from visitor.enums.id_types import ID_TYPES, STATUS_CHOICES, TYPE_VISIT
 
 
 
