@@ -6,7 +6,6 @@ Django REST API backend for managing visitor check-ins, host approvals, and visi
 
 - Visitor registration and check-in/check-out tracking
 - Host approval workflow with tokenized email links
-- Blacklist management for banned visitors
 - Audit logging for compliance
 - Scheduled visit expiration
 
@@ -40,6 +39,5 @@ visitor_backend/
 - **Visit**: Tracks visitor check-in/check-out, status, and duration
 - **Host**: Employee who receives visitors
 - **Profiles**: Visitor information and history
-- **Blacklist**: Banned visitors
 - **AuditLog**: Compliance audit trail
 - **Approval**: Visit approval workflow

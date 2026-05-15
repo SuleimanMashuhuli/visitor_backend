@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  django: 
+    image:
+    container_name:
+    build:
+      context: ..
+      dockerfile: DockerFile
+    network_mode:
+    ports:
+    env_file:
+    command:
+    depends_on:
+
+  celery:
+    
+  
+  db:
+    image:
+    container_name:
+    environment:
+    port:
+    volumes:
+
+volumes:

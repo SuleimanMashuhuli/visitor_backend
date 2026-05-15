@@ -1,34 +1,16 @@
-### 🔴 Issues / Corrections Needed
 
-**3. Incomplete Features**
-- `services/` directory is empty - no business logic layer
-- No email templates
-- No approval token generation on Visit model
-- No authentication (JWT/Token) setup
-**4. Data Model Issues**
-- Missing `user` relationship in Host model
-- No indexes on frequently queried fields
-**5. Configuration Gaps**
-- No `.env` file setup
-- DEBUG=True in production settings
-- Redis/Celery configs lack error handling
-- No migrations generated
----
+# CRITICAL (will crash or not work):
+1. Fix visitor/tasks/tasks.py — visit.approval_token doesn't exist;
+3. Run makemigrations and migrate — Approval model has no migration yet
+5. Add REST_FRAMEWORK config in settings.py
 
+# NEEDS IMPLEMENTATION:
+10. visitor/views/auth.py — complete stub, entire auth system missing (register, login, JWT, etc.)
+11. visitor/services/ — empty, no business logic layer
+12. visitor/admin.py — empty, register your models
+13. visitor/tests.py — no tests
 
-
-1. AuthViewSet (or use djoser defaults)
-Method	Endpoint	Purpose
-POST register	/api/auth/register/	Create user (receptionist/host)
-POST login	/api/auth/login/	Email + password → JWT
-POST logout	/api/auth/logout/	Blacklist refresh token
-POST refresh	/api/auth/refresh/	Rotate JWT
-GET me	/api/auth/me/	Current user profile
-POST google	/api/auth/google/	Google OAuth callback
-POST password_reset	/api/auth/password/reset/	Request reset email
-POST password_reset_confirm	/api/auth/password/reset/confirm/	Apply new password
-
-
-8. DashboardView (APIView)
-Method	Endpoint	Purpose
-GET	/api/dashboard/ --- Single call returning: pending count, approved today, avg approval time, inside vs out, recent 6 visits
+# NICE TO HAVE:
+14. Docker Compose files — all incomplete/empty
+15. Empty __init__.py files littered everywhere (minor cleanup)
+16. Profiles model stores passwords in plain text — should use Django's AbstractUser

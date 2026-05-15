@@ -117,16 +117,12 @@ broker_connection_retry_on_startup = True
 
 CELERY_BEAT_SCHEDULE = {
     'expire-pending': {
-        'task': 'visits.tasks.expire_pending_visits',
+        'task': 'visits.tasks.tasks.expire_pending_visits',
         'schedule': crontab(minute='*/15'),
     },
     'auto-checkout': {
-        'task': 'visits.tasks.auto_checkout_overdue',
+        'task': 'visits.tasks.tasks.auto_checkout_overdue',
         'schedule': crontab(minute='*/30'),
-    },
-    'daily-report': {
-        'task': 'visits.tasks.send_daily_admin_report',
-        'schedule': crontab(hour=8, minute=0),
     },
 }
 

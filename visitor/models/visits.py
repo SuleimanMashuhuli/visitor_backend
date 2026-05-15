@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 from .host import Host
-from visitor.enums.id_types import ID_TYPES, STATUS_CHOICES, TYPE_VISIT
+from ..enums.id_types import ID_TYPES, STATUS_CHOICES, TYPE_VISIT
 
 
 
@@ -36,7 +36,7 @@ class Visit(models.Model):
         super().save(*args, **kwargs)
 
     def check_in(self):
-        if self.status == 'approved' and not self.approved_at:
+        if self.status == 'approved' and self.approved_at:
             self.check_in_at = timezone.now()
         self.save()
 

@@ -1,20 +1,20 @@
 from celery import shared_task
-from .models.visits import (Visit)
+from ..models.visits import (Visit)
 from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta
 
 @shared_task
-def send_host_approval_email(self, id):
+def send_host_approval_email(id):
     visit = Visit.objects.select_related('host').get(id=id)
     approve_url = f"https://yourapp.com/api/action/{visit.approval_token}?decision=approve"
     reject_url = f"https://yourapp.com/api/action/{visit.approval_token}?decision=reject"
 
     send_mail(
-        subject = f"Visitor request: {visit.visitor_name}
-        message= f"Approve: {approve_url}\nReject: {reject_url}",
+        subject = f"Visitor request: {visit.visitor_name}",
+        message = f"Approve: {approve_url}\nReject: {reject_url}",
         from_email= "noreply@suleimandev.com",
-        recipient_list=[visit.host.email],
+        recipient_list=[visit.host.host_email],
     )
 
 @shared_task

@@ -2,7 +2,7 @@ __author__ = 'Suleiman Ali Mashuhuli'
 
 from django.urls import path
 from django.http import JsonResponse
-from visitor.views.visits import VisitViewSet, check_in, check_out, resend_email
+from visitor.views.visits import VisitViewSet
 from visitor.views.hosts import HostViewSet, available
 from visitor.views.audit import audit_list, retrieve_audit
 from visitor.views.reports import summary, daily, export_csv, dashboard
@@ -13,10 +13,9 @@ def app_root(request):
 urlpatterns = [
     path('', app_root),
     path('api/visits/', VisitViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('api/visits/<int:id>/check-in/', check_in, name='check_in'),
-    path('api/visits/<int:id>/check-out/', check_out, name='check_out'),
-    path('api/visits/<int:id>/resend-email/', resend_email, name='resend_email'),
-    path('api/visits/active/', VisitViewSet.as_view({'get': 'active'}), name='visits-active'),
+    path('api/visits/<int:id>/check-in/', VisitViewSet.as_view({'post': 'check_in'})),
+    path('api/visits/<int:id>/check-out/', VisitViewSet.as_view({'post': 'check_out'})),
+    path('api/visits/<int:id>/resend-email/', VisitViewSet.as_view({'post': 'resend_email'})),
     path('api/hosts/', HostViewSet.as_view({'get': 'list'})),
     path('api/hosts/<int:id>/', HostViewSet.as_view({'get': 'retrieve'})),
     path('api/hosts/available/', available, name='available'),

@@ -1,7 +1,7 @@
 __author__ = 'Suleiman Ali Mashuhuli'
 
 from django.db import models
-from visitor.enums.id_types import ROLES_CHOICE
+from ..enums.id_types import ROLES_CHOICE
 
 class Profiles(models.Model):
     """
